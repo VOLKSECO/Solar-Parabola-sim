@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulation Parabole Solaire</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Simulation de Chauffage Solaire</h1>
+        
+        <!-- Schéma de l'installation -->
+        <div class="schema">
+            <h2>Schéma de l'Installation</h2>
+            <img src="./sources/schema.svg" alt="Schéma Installation" class="schema-img">
+            <p>Soleil → Parabole → Casserole d'eau</p>
+        </div>
+
+        <!-- Modules (vcards) -->
+        <div class="modules">
+            <div class="vcard">
+                <img src="./sources/soleil.svg" alt="Soleil" class="module-img">
+                <h3>Soleil</h3>
+                <label>Radiation solaire (W/m²): <input type="number" id="G" value="650"></label>
+            </div>
+            <div class="vcard">
+                <img src="./sources/parabole.svg" alt="Parabole" class="module-img">
+                <h3>Parabole</h3>
+                <label>Diamètre (m): <input type="number" id="D" value="0.8" step="0.1"></label>
+                <label>Efficacité optique: <input type="number" id="eta_opt" value="0.78" step="0.01"></label>
+            </div>
+            <div class="vcard">
+                <img src="./sources/casserole.svg" alt="Casserole" class="module-img">
+                <h3>Casserole d'eau</h3>
+                <label>Volume (L): <input type="number" id="V" value="0.5" step="0.1"></label>
+                <label>Température initiale (°C): <input type="number" id="T_init" value="20"></label>
+                <label>Température extérieure (°C): <input type="number" id="T_ext" value="20"></label>
+                <label>Efficacité transfert: <input type="number" id="eta_trans" value="0.72" step="0.01"></label>
+                <label>Coefficient pertes (W/°C): <input type="number" id="k_pertes" value="0.5" step="0.1"></label>
+            </div>
+        </div>
+
+        <!-- Bouton de simulation -->
+        <button onclick="runSimulation()">Lancer Simulation</button>
+
+        <!-- Résultats -->
+        <div class="output-section">
+            <h2>Résultats</h2>
+            <p id="result">Temps pour atteindre 100°C : -</p>
+            <div class="charts">
+                <div class="chart-container">
+                    <h3>Température de l'eau</h3>
+                    <canvas id="temperatureChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Énergie</h3>
+                    <canvas id="energyChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
