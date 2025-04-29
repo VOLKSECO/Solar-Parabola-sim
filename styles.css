@@ -3,6 +3,12 @@ body {
     background-color: #f4f4f4;
     margin: 0;
     padding: 10px;
+    direction: ltr;
+}
+
+body[lang="ar"] {
+    direction: rtl;
+    font-family: 'Noto Sans Arabic', Arial, sans-serif;
 }
 
 .container {
@@ -18,6 +24,24 @@ h1 {
     text-align: center;
     color: #333;
     font-size: 1.8em;
+}
+
+.intro-text {
+    text-align: center;
+    font-size: 0.9em;
+    color: #555;
+    margin: 10px 0;
+}
+
+.language-selector {
+    text-align: center;
+    margin: 10px 0;
+}
+
+.language-selector select {
+    padding: 5px;
+    font-size: 0.9em;
+    border-radius: 5px;
 }
 
 .schema {
@@ -80,11 +104,20 @@ h1 {
     text-align: left;
 }
 
+body[lang="ar"] .inputs label {
+    text-align: right;
+}
+
 .inputs input {
     width: 80px;
     padding: 5px;
     font-size: 0.9em;
     margin-left: 10px;
+}
+
+body[lang="ar"] .inputs input {
+    margin-left: 0;
+    margin-right: 10px;
 }
 
 .inputs .explanation {
@@ -141,7 +174,9 @@ h1 {
     padding: 10px;
     border-radius: 8px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    width: 80%;
+    width: 100%;
+    max-width: 800px;
+    min-height: 250px;
     margin: 0 auto;
 }
 
@@ -150,25 +185,56 @@ h1 {
     font-size: 1.1em;
 }
 
+.chart-container canvas {
+    width: 100% !important;
+    height: auto !important;
+}
+
 .report {
-    max-width: 80%;
+    max-width: 800px;
     margin: 20px auto;
-    padding: 10px;
+    padding: 15px;
     background: #f9f9f9;
     border-radius: 8px;
+    border: 1px solid #ddd;
 }
 
 .report h3 {
     font-size: 1.2em;
     color: #333;
+    text-align: center;
 }
 
-.report p, .report ul {
+.report-section {
+    margin: 15px 0;
+}
+
+.report-section i {
+    color: #007bff;
+    margin-right: 10px;
+}
+
+body[lang="ar"] .report-section i {
+    margin-right: 0;
+    margin-left: 10px;
+}
+
+.report-section h4 {
+    font-size: 1.1em;
+    color: #007bff;
+    margin: 10px 0;
+}
+
+.report-section.advice h4 {
+    color: #28a745;
+}
+
+.report-section p, .report-section ul {
     font-size: 0.9em;
     color: #555;
 }
 
-.report ul li {
+.report-section ul li {
     margin: 5px 0;
 }
 
@@ -210,6 +276,9 @@ footer a:hover {
     .chart-container, .report {
         max-width: 90%;
     }
+    .chart-container {
+        min-height: 200px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -236,5 +305,14 @@ footer a:hover {
     }
     .report p, .report ul {
         font-size: 0.8em;
+    }
+    .report-section h4 {
+        font-size: 1em;
+    }
+    .chart-container {
+        min-height: 180px;
+    }
+    .chart-container h3 {
+        font-size: 1em;
     }
 }

@@ -3,137 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulation Parabole Solaire</title>
+    <title data-lang="title">Simulation Parabole Solaire</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <h1>Simulation de Chauffage Solaire</h1>
+        <h1 data-lang="title">Simulation de Chauffage Solaire</h1>
+        <p class="intro-text" data-lang="intro">Simulez comment une parabole solaire chauffe de l’eau avec le soleil ! Entrez vos paramètres et découvrez les résultats en graphiques.</p>
         
+        <!-- Sélecteur de langue -->
+        <div class="language-selector">
+            <label for="language" data-lang="language-label">Langue :</label>
+            <select id="language" onchange="changeLanguage()">
+                <option value="fr">Français</option>
+                <option value="en">English</option>
+                <option value="pt">Português</option>
+                <option value="es">Español</option>
+                <option value="de">Deutsch</option>
+                <option value="ar">العربية</option>
+            </select>
+        </div>
+
         <!-- Schéma de l'installation -->
         <div class="schema">
-            <h2>Comment ça marche ?</h2>
+            <h2 data-lang="schema-title">Comment ça marche ?</h2>
             <img src="./sources/schema.svg" alt="Schéma Installation" class="schema-img">
-            <p>Le soleil envoie des rayons, la parabole les concentre, et l'eau chauffe dans la casserole.</p>
+            <p data-lang="schema-text">Le soleil envoie des rayons, la parabole les concentre, et l'eau chauffe dans la casserole.</p>
         </div>
 
         <!-- Modules (vcards) -->
         <div class="modules">
             <div class="vcard" id="soleil-vcard">
                 <img src="./sources/soleil.svg" alt="Soleil" class="module-img">
-                <h3>Soleil</h3>
+                <h3 data-lang="soleil-title">Soleil</h3>
                 <div class="params">
-                    <p>Puissance du soleil : <span id="G-display">800</span> W/m²</p>
+                    <p><span data-lang="soleil-param">Puissance du soleil :</span> <span id="G-display">650</span> <span data-lang="unit-wm2">W/m²</span></p>
                 </div>
                 <div class="inputs" id="soleil-inputs" style="display: none;">
                     <label>
-                        Radiation solaire (W/m²): 
-                        <input type="number" id="G" value="800">
-                        <span class="explanation">Force des rayons solaires.</span>
+                        <span data-lang="soleil-label">Radiation solaire</span> (<span data-lang="unit-wm2">W/m²</span>) :
+                        <input type="number" id="G" value="650">
+                        <span class="explanation" data-lang="soleil-explanation">Force des rayons solaires.</span>
                     </label>
                 </div>
-                <button class="edit-btn" onclick="toggleEdit('soleil')">Modifier</button>
+                <button class="edit-btn" onclick="toggleEdit('soleil')" data-lang="edit-btn">Modifier</button>
             </div>
             <div class="vcard" id="parabole-vcard">
                 <img src="./sources/parabole.svg" alt="Parabole" class="module-img">
-                <h3>Parabole</h3>
+                <h3 data-lang="parabole-title">Parabole</h3>
                 <div class="params">
-                    <p>Taille : <span id="D-display">2</span> m</p>
-                    <p>Efficacité : <span id="eta_opt-display">0.9</span></p>
+                    <p><span data-lang="parabole-size">Taille :</span> <span id="D-display">0.8</span> <span data-lang="unit-m">m</span></p>
+                    <p><span data-lang="parabole-efficiency">Efficacité :</span> <span id="eta_opt-display">0.92</span></p>
                 </div>
                 <div class="inputs" id="parabole-inputs" style="display: none;">
                     <label>
-                        Diamètre (m): 
-                        <input type="number" id="D" value="2" step="0.1">
-                        <span class="explanation">Taille de la parabole.</span>
+                        <span data-lang="parabole-size-label">Diamètre</span> (<span data-lang="unit-m">m</span>) :
+                        <input type="number" id="D" value="0.8" step="0.1">
+                        <span class="explanation" data-lang="parabole-size-explanation">Taille de la parabole.</span>
                     </label>
                     <label>
-                        Efficacité optique: 
-                        <input type="number" id="eta_opt" value="0.9" step="0.01">
-                        <span class="explanation">Capacité à réfléchir les rayons.</span>
+                        <span data-lang="parabole-efficiency-label">Efficacité optique :</span>
+                        <input type="number" id="eta_opt" value="0.82" step="0.01">
+                        <span class="explanation" data-lang="parabole-efficiency-explanation">Capacité à réfléchir les rayons.</span>
                     </label>
                 </div>
-                <button class="edit-btn" onclick="toggleEdit('parabole')">Modifier</button>
+                <button class="edit-btn" onclick="toggleEdit('parabole')" data-lang="edit-btn">Modifier</button>
             </div>
             <div class="vcard" id="casserole-vcard">
                 <img src="./sources/casserole.svg" alt="Casserole" class="module-img">
-                <h3>Casserole d'eau</h3>
+                <h3 data-lang="casserole-title">Casserole d'eau</h3>
                 <div class="params">
-                    <p>Volume : <span id="V-display">5</span> L</p>
-                    <p>Température initiale : <span id="T_init-display">20</span> °C</p>
-                    <p>Température extérieure : <span id="T_ext-display">20</span> °C</p>
-                    <p>Efficacité transfert : <span id="eta_trans-display">0.8</span></p>
-                    <p>Pertes : <span id="k_pertes-display">5</span> W/°C</p>
+                    <p><span data-lang="casserole-volume">Volume :</span> <span id="V-display">0.5</span> <span data-lang="unit-l">L</span></p>
+                    <p><span data-lang="casserole-initial-temp">Température initiale :</span> <span id="T_init-display">17</span> <span data-lang="unit-c">°C</span></p>
+                    <p><span data-lang="casserole-external-temp">Température extérieure :</span> <span id="T_ext-display">20</span> <span data-lang="unit-c">°C</span></p>
+                    <p><span data-lang="casserole-efficiency">Efficacité transfert :</span> <span id="eta_trans-display">0.92</span></p>
+                    <p><span data-lang="casserole-losses">Pertes :</span> <span id="k_pertes-display">1</span> <span data-lang="unit-wc">W/°C</span></p>
                 </div>
                 <div class="inputs" id="casserole-inputs" style="display: none;">
                     <label>
-                        Volume (L): 
-                        <input type="number" id="V" value="5" step="0.1">
-                        <span class="explanation">Quantité d’eau.</span>
+                        <span data-lang="casserole-volume-label">Volume</span> (<span data-lang="unit-l">L</span>) :
+                        <input type="number" id="V" value="0.5" step="0.1">
+                        <span class="explanation" data-lang="casserole-volume-explanation">Quantité d’eau.</span>
                     </label>
                     <label>
-                        Température initiale (°C): 
-                        <input type="number" id="T_init" value="20">
-                        <span class="explanation">Température de l’eau au départ.</span>
+                        <span data-lang="casserole-initial-temp-label">Température initiale</span> (<span data-lang="unit-c">°C</span>) :
+                        <input type="number" id="T_init" value="17">
+                        <span class="explanation" data-lang="casserole-initial-temp-explanation">Température de l’eau au départ.</span>
                     </label>
                     <label>
-                        Température extérieure (°C): 
+                        <span data-lang="casserole-external-temp-label">Température extérieure</span> (<span data-lang="unit-c">°C</span>) :
                         <input type="number" id="T_ext" value="20">
-                        <span class="explanation">Température autour.</span>
+                        <span class="explanation" data-lang="casserole-external-temp-explanation">Température autour.</span>
                     </label>
                     <label>
-                        Efficacité transfert: 
-                        <input type="number" id="eta_trans" value="0.8" step="0.01">
-                        <span class="explanation">Chaleur atteignant l’eau.</span>
+                        <span data-lang="casserole-efficiency-label">Efficacité transfert :</span>
+                        <input type="number" id="eta_trans" value="0.85" step="0.01">
+                        <span class="explanation" data-lang="casserole-efficiency-explanation">Chaleur atteignant l’eau.</span>
                     </label>
                     <label>
-                        Coefficient pertes (W/°C): 
-                        <input type="number" id="k_pertes" value="5" step="0.1">
-                        <span class="explanation">Chaleur perdue.</span>
+                        <span data-lang="casserole-losses-label">Coefficient pertes</span> (<span data-lang="unit-wc">W/°C</span>) :
+                        <input type="number" id="k_pertes" value="1" step="0.1">
+                        <span class="explanation" data-lang="casserole-losses-explanation">Chaleur perdue.</span>
                     </label>
                 </div>
-                <button class="edit-btn" onclick="toggleEdit('casserole')">Modifier</button>
+                <button class="edit-btn" onclick="toggleEdit('casserole')" data-lang="edit-btn">Modifier</button>
             </div>
         </div>
 
         <!-- Bouton de simulation -->
-        <button class="simulate-btn" onclick="runSimulation()">Lancer Simulation</button>
+        <button class="simulate-btn" onclick="runSimulation()" data-lang="simulate-btn">Lancer Simulation</button>
 
         <!-- Résultats -->
         <div class="output-section">
-            <h2>Résultats</h2>
-            <p id="result">Temps pour atteindre 100°C : -</p>
+            <h2 data-lang="results-title">Résultats</h2>
+            <p id="result" data-lang="result">Temps pour atteindre 100°C : -</p>
             <div class="charts">
                 <div class="chart-container">
-                    <h3>Température de l'eau</h3>
+                    <h3 data-lang="temp-chart-title">Température de l'eau</h3>
                     <canvas id="temperatureChart"></canvas>
                 </div>
                 <div class="chart-container">
-                    <h3>Énergie</h3>
+                    <h3 data-lang="energy-chart-title">Énergie</h3>
                     <canvas id="energyChart"></canvas>
                 </div>
             </div>
             <div class="report" id="report">
-                <h3>Rapport des résultats</h3>
-                <p id="report-text">Lancez une simulation pour voir les résultats expliqués !</p>
-                <h4>Comment on calcule ?</h4>
-                <ul>
-                    <li><strong>Surface de la parabole :</strong> Aire du cercle = 3.14 × (Taille ÷ 2)²</li>
-                    <li><strong>Énergie du soleil :</strong> Puissance du soleil × Surface</li>
-                    <li><strong>Énergie captée :</strong> Énergie du soleil × Efficacité de la parabole</li>
-                    <li><strong>Pertes de chaleur :</strong> Pertes × (Température eau - Température extérieure)</li>
-                    <li><strong>Chauffage :</strong> Énergie captée × Efficacité transfert - Pertes</li>
-                </ul>
+                <h3 data-lang="report-title">Rapport des résultats</h3>
+                <div class="report-section">
+                    <i class="fas fa-chart-line"></i>
+                    <h4 data-lang="report-results">Résultats</h4>
+                    <p id="report-results-text" data-lang="report-results-text">Lancez une simulation pour voir les résultats !</p>
+                </div>
+                <div class="report-section">
+                    <i class="fas fa-lightbulb"></i>
+                    <h4 data-lang="report-interpretation">Interprétation</h4>
+                    <p id="report-interpretation-text" data-lang="report-interpretation-text">Les graphiques montrent comment l’eau chauffe et comment l’énergie est utilisée.</p>
+                </div>
+                <div class="report-section advice">
+                    <i class="fas fa-info-circle"></i>
+                    <h4 data-lang="report-advice">Conseils</h4>
+                    <p id="report-advice-text" data-lang="report-advice-text">Utilisez une radiation de 600-1000 W/m² (typique en été) et un diamètre de 1-2 m pour un usage domestique.</p>
+                </div>
+                <div class="report-section">
+                    <i class="fas fa-calculator"></i>
+                    <h4 data-lang="report-equations">Comment on calcule ?</h4>
+                    <ul id="report-equations-list">
+                        <li data-lang="equation-surface">Surface de la parabole : Aire du cercle = 3.14 × (Taille ÷ 2)²</li>
+                        <li data-lang="equation-solar">Énergie du soleil : Puissance du soleil × Surface</li>
+                        <li data-lang="equation-captured">Énergie captée : Énergie du soleil × Efficacité de la parabole</li>
+                        <li data-lang="equation-losses">Pertes de chaleur : Pertes × (Température eau - Température extérieure)</li>
+                        <li data-lang="equation-heating">Chauffage : Énergie captée × Efficacité transfert - Pertes</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Pied de page -->
     <footer>
-        <p>Simulateur créé par Marco Bernardo.</p>
-        <p>Code sous licence <a href="https://opensource.org/licenses/MIT">MIT</a>.</p>
-        <p>Rapport explicatif sous licence <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA 4.0</a>.</p>
+        <p data-lang="footer-author">Simulateur créé par Marco Bernardo.</p>
+        <p data-lang="footer-code-license">Code sous licence <a href="https://opensource.org/licenses/MIT">MIT</a>.</p>
+        <p data-lang="footer-report-license">Rapport explicatif sous licence <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA 4.0</a>.</p>
     </footer>
     <script src="script.js"></script>
 </body>
