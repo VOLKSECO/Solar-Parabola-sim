@@ -3,29 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
     <title data-lang="title">Simulation Parabole Solaire</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
     <div class="container">
-                <!-- Sélecteur de langue -->
-                <div class="language-selector">
-                    <label for="language" data-lang="language-label">Langue :</label>
-                    <select id="language" onchange="changeLanguage()">
-                        <option value="fr">Français</option>
-                        <option value="en">English</option>
-                        <option value="pt">Português</option>
-                        <option value="es">Español</option>
-                        <option value="de">Deutsch</option>
-                        <option value="ar">العربية</option>
-                    </select>
-                </div>
-
         <h1 data-lang="title">Simulation de Chauffage Solaire</h1>
         <p class="intro-text" data-lang="intro">Simulez comment une parabole solaire chauffe de l’eau avec le soleil ! Entrez vos paramètres et découvrez les résultats en graphiques.</p>
         
+        <!-- Sélecteur de langue -->
+        <div class="language-selector">
+            <label for="language" data-lang="language-label">Langue :</label>
+            <select id="language" onchange="changeLanguage()">
+                <option value="fr">Français</option>
+                <option value="en">English</option>
+                <option value="pt">Português</option>
+                <option value="es">Español</option>
+                <option value="de">Deutsch</option>
+                <option value="ar">العربية</option>
+            </select>
+        </div>
+
         <!-- Schéma de l'installation -->
         <div class="schema">
             <h2 data-lang="schema-title">Comment ça marche ?</h2>
@@ -44,7 +45,7 @@
                 <div class="inputs" id="soleil-inputs" style="display: none;">
                     <label>
                         <span data-lang="soleil-label">Radiation solaire</span> (<span data-lang="unit-wm2">W/m²</span>) :
-                        <input type="number" id="G" value="725">
+                        <input type="number" id="G" value="735">
                         <span class="explanation" data-lang="soleil-explanation">Force des rayons solaires. Exemple : 600-1000 W/m² en été. <a href="https://re.jrc.ec.europa.eu/pvg_tools/en/" target="_blank">Consultez PVGIS pour des données régionales</a>.</span>
                     </label>
                 </div>
@@ -110,7 +111,7 @@
                     </label>
                     <label>
                         <span data-lang="casserole-losses-label">Coefficient pertes</span> (<span data-lang="unit-wc">W/°C</span>) :
-                        <input type="number" id="k_pertes" value="1.45" step="0.1">
+                        <input type="number" id="k_pertes" value="1.25" step="0.1">
                         <span class="explanation" data-lang="casserole-losses-explanation">Chaleur perdue. Exemple : 3-10 W/°C selon l’isolation. <a href="https://www.nrel.gov/docs/fy12osti/55023.pdf" target="_blank">Voir NREL</a>.</span>
                     </label>
                 </div>
@@ -173,6 +174,6 @@
         <p data-lang="footer-code-license">Code sous licence <a href="https://opensource.org/licenses/MIT">MIT</a>.</p>
         <p data-lang="footer-report-license">Rapport explicatif sous licence <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA 4.0</a>.</p>
     </footer>
-    <script src="script.js"></script>
+    <script src="./script.js"></script>
 </body>
 </html>
