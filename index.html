@@ -10,22 +10,22 @@
 </head>
 <body>
     <div class="container">
+                <!-- Sélecteur de langue -->
+                <div class="language-selector">
+                    <label for="language" data-lang="language-label">Langue :</label>
+                    <select id="language" onchange="changeLanguage()">
+                        <option value="fr">Français</option>
+                        <option value="en">English</option>
+                        <option value="pt">Português</option>
+                        <option value="es">Español</option>
+                        <option value="de">Deutsch</option>
+                        <option value="ar">العربية</option>
+                    </select>
+                </div>
+
         <h1 data-lang="title">Simulation de Chauffage Solaire</h1>
         <p class="intro-text" data-lang="intro">Simulez comment une parabole solaire chauffe de l’eau avec le soleil ! Entrez vos paramètres et découvrez les résultats en graphiques.</p>
         
-        <!-- Sélecteur de langue -->
-        <div class="language-selector">
-            <label for="language" data-lang="language-label">Langue :</label>
-            <select id="language" onchange="changeLanguage()">
-                <option value="fr">Français</option>
-                <option value="en">English</option>
-                <option value="pt">Português</option>
-                <option value="es">Español</option>
-                <option value="de">Deutsch</option>
-                <option value="ar">العربية</option>
-            </select>
-        </div>
-
         <!-- Schéma de l'installation -->
         <div class="schema">
             <h2 data-lang="schema-title">Comment ça marche ?</h2>
@@ -44,8 +44,8 @@
                 <div class="inputs" id="soleil-inputs" style="display: none;">
                     <label>
                         <span data-lang="soleil-label">Radiation solaire</span> (<span data-lang="unit-wm2">W/m²</span>) :
-                        <input type="number" id="G" value="650">
-                        <span class="explanation" data-lang="soleil-explanation">Force des rayons solaires.</span>
+                        <input type="number" id="G" value="725">
+                        <span class="explanation" data-lang="soleil-explanation">Force des rayons solaires. Exemple : 600-1000 W/m² en été. <a href="https://re.jrc.ec.europa.eu/pvg_tools/en/" target="_blank">Consultez PVGIS pour des données régionales</a>.</span>
                     </label>
                 </div>
                 <button class="edit-btn" onclick="toggleEdit('soleil')" data-lang="edit-btn">Modifier</button>
@@ -54,19 +54,25 @@
                 <img src="./sources/parabole.svg" alt="Parabole" class="module-img">
                 <h3 data-lang="parabole-title">Parabole</h3>
                 <div class="params">
-                    <p><span data-lang="parabole-size">Taille :</span> <span id="D-display">0.8</span> <span data-lang="unit-m">m</span></p>
-                    <p><span data-lang="parabole-efficiency">Efficacité :</span> <span id="eta_opt-display">0.92</span></p>
+                    <p><span data-lang="parabole-height">Hauteur :</span> <span id="H-display">0.82</span> <span data-lang="unit-m">m</span></p>
+                    <p><span data-lang="parabole-width">Largeur :</span> <span id="W-display">0.72</span> <span data-lang="unit-m">m</span></p>
+                    <p><span data-lang="parabole-efficiency">Efficacité :</span> <span id="eta_opt-display">0.89</span></p>
                 </div>
                 <div class="inputs" id="parabole-inputs" style="display: none;">
                     <label>
-                        <span data-lang="parabole-size-label">Diamètre</span> (<span data-lang="unit-m">m</span>) :
-                        <input type="number" id="D" value="0.8" step="0.1">
-                        <span class="explanation" data-lang="parabole-size-explanation">Taille de la parabole.</span>
+                        <span data-lang="parabole-height-label">Hauteur</span> (<span data-lang="unit-m">m</span>) :
+                        <input type="number" id="H" value="0.82" step="0.1">
+                        <span class="explanation" data-lang="parabole-height-explanation">Dimension verticale de la parabole. Exemple : 0.5-2 m pour un usage domestique. <a href="http://solarcooking.wikia.com/wiki/Parabolic_solar_cookers" target="_blank">Voir Solar Cooking Wiki</a>.</span>
+                    </label>
+                    <label>
+                        <span data-lang="parabole-width-label">Largeur</span> (<span data-lang="unit-m">m</span>) :
+                        <input type="number" id="W" value="0.72" step="0.1">
+                        <span class="explanation" data-lang="parabole-width-explanation">Dimension horizontale de la parabole. Exemple : 0.5-2 m, souvent plus large que la hauteur. <a href="http://solarcooking.wikia.com/wiki/Parabolic_solar_cookers" target="_blank">Voir Solar Cooking Wiki</a>.</span>
                     </label>
                     <label>
                         <span data-lang="parabole-efficiency-label">Efficacité optique :</span>
-                        <input type="number" id="eta_opt" value="0.82" step="0.01">
-                        <span class="explanation" data-lang="parabole-efficiency-explanation">Capacité à réfléchir les rayons.</span>
+                        <input type="number" id="eta_opt" value="0.89" step="0.01">
+                        <span class="explanation" data-lang="parabole-efficiency-explanation">Capacité à réfléchir les rayons. Exemple : 0.7-0.9 pour une surface polie. <a href="https://www.nrel.gov/docs/fy12osti/55023.pdf" target="_blank">Voir NREL</a>.</span>
                     </label>
                 </div>
                 <button class="edit-btn" onclick="toggleEdit('parabole')" data-lang="edit-btn">Modifier</button>
@@ -78,34 +84,34 @@
                     <p><span data-lang="casserole-volume">Volume :</span> <span id="V-display">0.5</span> <span data-lang="unit-l">L</span></p>
                     <p><span data-lang="casserole-initial-temp">Température initiale :</span> <span id="T_init-display">17</span> <span data-lang="unit-c">°C</span></p>
                     <p><span data-lang="casserole-external-temp">Température extérieure :</span> <span id="T_ext-display">20</span> <span data-lang="unit-c">°C</span></p>
-                    <p><span data-lang="casserole-efficiency">Efficacité transfert :</span> <span id="eta_trans-display">0.92</span></p>
-                    <p><span data-lang="casserole-losses">Pertes :</span> <span id="k_pertes-display">1</span> <span data-lang="unit-wc">W/°C</span></p>
+                    <p><span data-lang="casserole-efficiency">Efficacité transfert :</span> <span id="eta_trans-display">0.85</span></p>
+                    <p><span data-lang="casserole-losses">Pertes :</span> <span id="k_pertes-display">5</span> <span data-lang="unit-wc">W/°C</span></p>
                 </div>
                 <div class="inputs" id="casserole-inputs" style="display: none;">
                     <label>
                         <span data-lang="casserole-volume-label">Volume</span> (<span data-lang="unit-l">L</span>) :
                         <input type="number" id="V" value="0.5" step="0.1">
-                        <span class="explanation" data-lang="casserole-volume-explanation">Quantité d’eau.</span>
+                        <span class="explanation" data-lang="casserole-volume-explanation">Quantité d’eau. Exemple : 0.5-5 L pour la cuisson. <a href="http://solarcooking.wikia.com/wiki/Water" target="_blank">Voir Solar Cooking Wiki</a>.</span>
                     </label>
                     <label>
                         <span data-lang="casserole-initial-temp-label">Température initiale</span> (<span data-lang="unit-c">°C</span>) :
                         <input type="number" id="T_init" value="17">
-                        <span class="explanation" data-lang="casserole-initial-temp-explanation">Température de l’eau au départ.</span>
+                        <span class="explanation" data-lang="casserole-initial-temp-explanation">Température de l’eau au départ. Exemple : 15-25°C (ambiante).</span>
                     </label>
                     <label>
                         <span data-lang="casserole-external-temp-label">Température extérieure</span> (<span data-lang="unit-c">°C</span>) :
                         <input type="number" id="T_ext" value="20">
-                        <span class="explanation" data-lang="casserole-external-temp-explanation">Température autour.</span>
+                        <span class="explanation" data-lang="casserole-external-temp-explanation">Température de l’air. Exemple : 10-30°C selon la saison. <a href="https://openweathermap.org/" target="_blank">Voir OpenWeatherMap</a>.</span>
                     </label>
                     <label>
                         <span data-lang="casserole-efficiency-label">Efficacité transfert :</span>
-                        <input type="number" id="eta_trans" value="0.85" step="0.01">
-                        <span class="explanation" data-lang="casserole-efficiency-explanation">Chaleur atteignant l’eau.</span>
+                        <input type="number" id="eta_trans" value="0.89" step="0.01">
+                        <span class="explanation" data-lang="casserole-efficiency-explanation">Chaleur atteignant l’eau. Exemple : 0.8-0.9 si bien conçu. <a href="http://solarcooking.wikia.com/wiki/Heat_transfer" target="_blank">Voir Solar Cooking Wiki</a>.</span>
                     </label>
                     <label>
                         <span data-lang="casserole-losses-label">Coefficient pertes</span> (<span data-lang="unit-wc">W/°C</span>) :
-                        <input type="number" id="k_pertes" value="1" step="0.1">
-                        <span class="explanation" data-lang="casserole-losses-explanation">Chaleur perdue.</span>
+                        <input type="number" id="k_pertes" value="1.45" step="0.1">
+                        <span class="explanation" data-lang="casserole-losses-explanation">Chaleur perdue. Exemple : 3-10 W/°C selon l’isolation. <a href="https://www.nrel.gov/docs/fy12osti/55023.pdf" target="_blank">Voir NREL</a>.</span>
                     </label>
                 </div>
                 <button class="edit-btn" onclick="toggleEdit('casserole')" data-lang="edit-btn">Modifier</button>
@@ -144,13 +150,13 @@
                 <div class="report-section advice">
                     <i class="fas fa-info-circle"></i>
                     <h4 data-lang="report-advice">Conseils</h4>
-                    <p id="report-advice-text" data-lang="report-advice-text">Utilisez une radiation de 600-1000 W/m² (typique en été) et un diamètre de 1-2 m pour un usage domestique.</p>
+                    <p id="report-advice-text" data-lang="report-advice-text">Utilisez une radiation de 600-1000 W/m² (typique en été) et une parabole de 0.5-2 m de hauteur/largeur pour un usage domestique.</p>
                 </div>
                 <div class="report-section">
                     <i class="fas fa-calculator"></i>
                     <h4 data-lang="report-equations">Comment on calcule ?</h4>
                     <ul id="report-equations-list">
-                        <li data-lang="equation-surface">Surface de la parabole : Aire du cercle = 3.14 × (Taille ÷ 2)²</li>
+                        <li data-lang="equation-surface">Surface de la parabole : Aire de l’ellipse = 3.14 × Hauteur × Largeur ÷ 4</li>
                         <li data-lang="equation-solar">Énergie du soleil : Puissance du soleil × Surface</li>
                         <li data-lang="equation-captured">Énergie captée : Énergie du soleil × Efficacité de la parabole</li>
                         <li data-lang="equation-losses">Pertes de chaleur : Pertes × (Température eau - Température extérieure)</li>

@@ -6,7 +6,7 @@ fetch('translations.json')
     .then(response => response.json())
     .then(data => {
         translations = data;
-        updateLanguage(currentLang); // Appeler après chargement des traductions
+        updateLanguage(currentLang);
     })
     .catch(error => console.error('Erreur chargement traductions:', error));
 
@@ -20,10 +20,8 @@ function changeLanguage() {
 
 // Mettre à jour tous les textes
 function updateLanguage(lang) {
-    // Vérifier si les traductions sont chargées
     if (!translations[lang]) return;
 
-    // Textes statiques (DOM)
     document.querySelectorAll('[data-lang]').forEach(element => {
         const key = element.getAttribute('data-lang');
         if (translations[lang][key]) {
@@ -31,10 +29,8 @@ function updateLanguage(lang) {
         }
     });
 
-    // Mettre à jour les valeurs des vcards
     updateVcardValues();
 
-    // Mettre à jour les graphiques si existants
     if (window.tempChart && window.tempChart.data && window.tempChart.data.datasets) {
         window.tempChart.data.datasets[0].label = translations[lang]['temp-chart-title'];
         window.tempChart.options.scales.x.title.text = translations[lang]['time-axis'];
@@ -54,7 +50,8 @@ function updateLanguage(lang) {
 // Mettre à jour les valeurs des vcards
 function updateVcardValues() {
     document.getElementById('G-display').textContent = document.getElementById('G').value;
-    document.getElementById('D-display').textContent = document.getElementById('D').value;
+    document.getElementById('H-display').textContent = document.getElementById('H').value;
+    document.getElementById('W-display').textContent = document.getElementById('W').value;
     document.getElementById('eta_opt-display').textContent = document.getElementById('eta_opt').value;
     document.getElementById('V-display').textContent = document.getElementById('V').value;
     document.getElementById('T_init-display').textContent = document.getElementById('T_init').value;
@@ -63,7 +60,7 @@ function updateVcardValues() {
     document.getElementById('k_pertes-display').textContent = document.getElementById('k_pertes').value;
 }
 
-// Initialiser les contextes des graphiques
+// Initialiser les graphiques
 const tempCtx = document.getElementById('temperatureChart').getContext('2d');
 const energyCtx = document.getElementById('energyChart').getContext('2d');
 
@@ -76,16 +73,10 @@ function toggleEdit(module) {
 }
 
 function runSimulation() {
-    // Vérifier si Chart.js est chargé
-    if (!window.Chart) {
-        console.error('Chart.js n\'est pas chargé. Vérifiez le CDN.');
-        document.getElementById('result').textContent = translations[currentLang]['error-chartjs'];
-        return;
-    }
-
     // Récupérer les entrées
     const G = parseFloat(document.getElementById('G').value) || 650;
-    const D = parseFloat(document.getElementById('D').value) || 0.8;
+    const H = parseFloat(document.getElementById('H').value) || 0.8;
+    const W = parseFloat(document.getElementById('W').value) || 1.0;
     const V = parseFloat(document.getElementById('V').value) || 0.5;
     const T_init = parseFloat(document.getElementById('T_init').value) || 17;
     const T_ext = parseFloat(document.getElementById('T_ext').value) || 20;
@@ -95,7 +86,7 @@ function runSimulation() {
 
     // Constantes
     const c = 1.163; // Wh/(kg·°C)
-    const S = Math.PI * (D / 2) ** 2; // Surface parabole (m²)
+    const S = Math.PI * H * W / 4; // Surface parabole elliptique (m²)
     const m = V; // Masse eau (kg)
     let T_eau = T_init; // Température initiale (°C)
     const dt = 60; // Pas de temps (1 minute en secondes)
@@ -151,97 +142,89 @@ function runSimulation() {
     `;
     document.getElementById('report-advice-text').innerHTML = translations[currentLang]['report-advice-text'];
 
-    // Mettre à jour le graphique de température
-    try {
-        if (window.tempChart && typeof window.tempChart.destroy === 'function') {
-            window.tempChart.destroy();
-        }
-        window.tempChart = new Chart(tempCtx, {
-            type: 'line',
-            data: {
-                datasets: [{
-                    label: translations[currentLang]['temp-chart-title'],
-                    data: tempData,
-                    borderColor: '#007bff',
-                    fill: false,
-                    pointRadius: 0
-                }]
-            },
-            options: {
-                scales: {
-                    x: {
-                        type: 'linear',
-                        title: { display: true, text: translations[currentLang]['time-axis'] },
-                        ticks: { stepSize: 10 },
-                        max: Math.ceil(temps / 60)
-                    },
-                    y: {
-                        title: { display: true, text: translations[currentLang]['temp-axis'] },
-                        beginAtZero: false
-                    }
-                },
-                plugins: {
-                    legend: { position: 'bottom', labels: { font: { size: 12 } } }
-                }
-            }
-        });
-    } catch (error) {
-        console.error('Erreur lors de la création du graphique de température:', error);
-        document.getElementById('result').textContent = translations[currentLang]['error-chart'];
+    // Détruire les anciens graphiques si existants
+    if (window.tempChart && typeof window.tempChart.destroy === 'function') {
+        window.tempChart.destroy();
+    }
+    if (window.energyChart && typeof window.energyChart.destroy === 'function') {
+        window.energyChart.destroy();
     }
 
-    // Mettre à jour le graphique d'énergie
-    try {
-        if (window.energyChart && typeof window.energyChart.destroy === 'function') {
-            window.energyChart.destroy();
-        }
-        window.energyChart = new Chart(energyCtx, {
-            type: 'line',
-            data: {
-                datasets: [
-                    {
-                        label: translations[currentLang]['energy-solar-label'],
-                        data: energyData.solar,
-                        borderColor: '#004085',
-                        fill: false,
-                        pointRadius: 0
-                    },
-                    {
-                        label: translations[currentLang]['energy-captured-label'],
-                        data: energyData.captured,
-                        borderColor: '#28a745',
-                        fill: false,
-                        pointRadius: 0
-                    },
-                    {
-                        label: translations[currentLang]['energy-lost-label'],
-                        data: energyData.losses,
-                        borderColor: '#dc3545',
-                        fill: false,
-                        pointRadius: 0
-                    }
-                ]
-            },
-            options: {
-                scales: {
-                    x: {
-                        type: 'linear',
-                        title: { display: true, text: translations[currentLang]['time-axis'] },
-                        ticks: { stepSize: 10 },
-                        max: Math.ceil(temps / 60)
-                    },
-                    y: {
-                        title: { display: true, text: translations[currentLang]['energy-axis'] },
-                        beginAtZero: true
-                    }
+    // Créer le graphique de température
+    window.tempChart = new Chart(tempCtx, {
+        type: 'line',
+        data: {
+            datasets: [{
+                label: translations[currentLang]['temp-chart-title'],
+                data: tempData,
+                borderColor: '#007bff',
+                fill: false,
+                pointRadius: 0
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'linear',
+                    title: { display: true, text: translations[currentLang]['time-axis'] },
+                    ticks: { stepSize: 10 },
+                    max: Math.ceil(temps / 60)
                 },
-                plugins: {
-                    legend: { position: 'bottom', labels: { font: { size: 12 } } }
+                y: {
+                    title: { display: true, text: translations[currentLang]['temp-axis'] },
+                    beginAtZero: false
                 }
+            },
+            plugins: {
+                legend: { position: 'bottom', labels: { font: { size: 12 } } }
             }
-        });
-    } catch (error) {
-        console.error('Erreur lors de la création du graphique d\'énergie:', error);
-        document.getElementById('result').textContent = translations[currentLang]['error-chart'];
-    }
+        }
+    });
+
+    // Créer le graphique d'énergie
+    window.energyChart = new Chart(energyCtx, {
+        type: 'line',
+        data: {
+            datasets: [
+                {
+                    label: translations[currentLang]['energy-solar-label'],
+                    data: energyData.solar,
+                    borderColor: '#004085',
+                    fill: false,
+                    pointRadius: 0
+                },
+                {
+                    label: translations[currentLang]['energy-captured-label'],
+                    data: energyData.captured,
+                    borderColor: '#28a745',
+                    fill: false,
+                    pointRadius: 0
+                },
+                {
+                    label: translations[currentLang]['energy-lost-label'],
+                    data: energyData.losses,
+                    borderColor: '#dc3545',
+                    fill: false,
+                    pointRadius: 0
+                }
+            ]
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'linear',
+                    title: { display: true, text: translations[currentLang]['time-axis'] },
+                    ticks: { stepSize: 10 },
+                    max: Math.ceil(temps / 60)
+                },
+                y: {
+                    title: { display: true, text: translations[currentLang]['energy-axis'] },
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: { position: 'bottom', labels: { font: { size: 12 } } }
+            }
+        }
+    });
 }
