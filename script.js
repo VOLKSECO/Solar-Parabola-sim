@@ -36,13 +36,13 @@ function updateLanguage(lang) {
 
     updateVcardValues();
 
-    if (window.tempChart && typeof window.tempChart.destroy === 'function') {
+    if (window.tempChart && typeof window.tempChart.update === 'function') {
         window.tempChart.data.datasets[0].label = translations[lang]['temp-chart-title'];
         window.tempChart.options.scales.x.title.text = translations[lang]['time-axis'];
         window.tempChart.options.scales.y.title.text = translations[lang]['temp-axis'];
         window.tempChart.update();
     }
-    if (window.energyChart && typeof window.energyChart.destroy === 'function') {
+    if (window.energyChart && typeof window.energyChart.update === 'function') {
         window.energyChart.data.datasets[0].label = translations[lang]['energy-solar-label'];
         window.energyChart.data.datasets[1].label = translations[lang]['energy-captured-label'];
         window.energyChart.data.datasets[2].label = translations[lang]['energy-lost-label'];
@@ -199,6 +199,8 @@ function runSimulation() {
                 }]
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     x: {
                         type: 'linear',
@@ -248,6 +250,8 @@ function runSimulation() {
                 ]
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     x: {
                         type: 'linear',
@@ -266,4 +270,24 @@ function runSimulation() {
             }
         });
     }
+
+    // Forcer le redimensionnement après la création des graphiques
+    setTimeout(() => {
+        if (window.tempChart && typeof window.tempChart.resize === 'function') {
+            window.tempChart.resize();
+        }
+        if (window.energyChart && typeof window.energyChart.resize === 'function') {
+            window.energyChart.resize();
+        }
+    }, 100);
 }
+
+// Redimensionner les graphiques lors du changement de taille de fenêtre
+window.addEventListener('resize', () => {
+    if (window.tempChart && typeof window.tempChart.resize === 'function') {
+        window.tempChart.resize();
+    }
+    if (window.energyChart && typeof window.energyChart.resize === 'function') {
+        window.energyChart.resize();
+    }
+});
